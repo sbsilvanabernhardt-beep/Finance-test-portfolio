@@ -515,6 +515,29 @@
       transition: transform .38s var(--ease), opacity .25s;
     }
 
+    /* ── NAV STRIP (prev / next labels) ─────── */
+    #navStrip {
+      position: fixed; bottom: 2.2rem; left: 50%; z-index: 400;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 2.8rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .5s var(--ease);
+      white-space: nowrap;
+    }
+    #navStrip.vis { opacity: 1; pointer-events: auto; }
+    .ns-btn {
+      font-size: .54rem; font-weight: 600; letter-spacing: .14em;
+      text-transform: uppercase; color: rgba(255,255,255,.35);
+      background: none; border: none; cursor: pointer;
+      padding: .35rem .5rem;
+      transition: color .22s;
+    }
+    .ns-btn:hover { color: rgba(255,255,255,.75); }
+    .ns-btn:empty,
+    .ns-btn[data-hidden] { visibility: hidden; pointer-events: none; }
+    .ns-next { color: rgba(255,255,255,.52); }
+    .ns-next.highlight { color: rgba(255,255,255,.82); }
+
     /* ── TOP SECTION LABEL ───────────────────── */
     #sectionLbl {
       position: fixed; left: 50%; top: 1.6rem; z-index: 400;
@@ -585,6 +608,11 @@
 
       /* counter */
       #counter { left: 1.3rem; bottom: 1.3rem; font-size: .52rem; }
+
+      /* nav strip — sits above dot nav on mobile */
+      #navStrip { bottom: 3.8rem; gap: 1.6rem; }
+      .ns-btn { font-size: .58rem; padding: .55rem .7rem; color: rgba(255,255,255,.5); }
+      .ns-next { color: rgba(255,255,255,.65); }
 
       /* carousel */
       #carousel {
@@ -915,6 +943,12 @@
   <div class="d-dot" data-idx="4" title="Business Partnering"></div>
 </div>
 
+<!-- NAV STRIP -->
+<div id="navStrip">
+  <button id="nsPrev" class="ns-btn"></button>
+  <button id="nsNext" class="ns-btn ns-next"></button>
+</div>
+
 <!-- COUNTER -->
 <div id="counter"><span id="cCurrent">01</span> &thinsp;/&thinsp; 05</div>
 
@@ -958,6 +992,7 @@
     'Process Improvement & Strategic Modelling',
     'Business Partnering'
   ];
+  const SHORT = ['About Me', 'AI & Process', 'Leadership', 'Modelling', 'Business'];
 
   /* ── ELEMENTS ──────────────────────────── */
   const heroEl     = document.getElementById('hero');
@@ -971,6 +1006,9 @@
   const arrowPrev  = document.getElementById('arrowPrev');
   const arrowNext  = document.getElementById('arrowNext');
   const progressEl = document.getElementById('progress');
+  const navStrip   = document.getElementById('navStrip');
+  const nsPrev     = document.getElementById('nsPrev');
+  const nsNext     = document.getElementById('nsNext');
   const sectionLbl = document.getElementById('sectionLbl');
   const cards      = Array.from(document.querySelectorAll('.c-card'));
   const dots       = Array.from(document.querySelectorAll('.d-dot'));
@@ -1026,6 +1064,16 @@
     const atContact = activeIdx === TOTAL;
     arrowPrev.classList.toggle('dim', activeIdx <= 0 || atContact);
     arrowNext.classList.toggle('dim', activeIdx >= TOTAL - 1);
+
+    // nav strip labels
+    nsPrev.textContent = activeIdx > 0 ? '← ' + SHORT[activeIdx - 1] : '← Intro';
+    if (activeIdx === TOTAL - 1) {
+      nsNext.textContent = "Let's connect →";
+      nsNext.classList.add('highlight');
+    } else {
+      nsNext.textContent = SHORT[activeIdx + 1] + ' →';
+      nsNext.classList.remove('highlight');
+    }
   }
 
   /* ── ENTER CAROUSEL ────────────────────── */
@@ -1038,6 +1086,7 @@
       counterEl.classList.add('vis');
       arrowPrev.classList.add('vis');
       arrowNext.classList.add('vis');
+      navStrip.classList.add('vis');
       navLogo.classList.add('vis');
       navLinks.forEach(l => l.classList.add('vis'));
     }, 280);
@@ -1050,6 +1099,7 @@
     counterEl.classList.remove('vis');
     arrowPrev.classList.remove('vis');
     arrowNext.classList.remove('vis');
+    navStrip.classList.remove('vis');
     navLogo.classList.remove('vis');
     navLinks.forEach(l => l.classList.remove('vis'));
     sectionLbl.classList.remove('vis');
@@ -1065,6 +1115,7 @@
     counterEl.classList.remove('vis');
     arrowPrev.classList.remove('vis');
     arrowNext.classList.remove('vis');
+    navStrip.classList.remove('vis');
     sectionLbl.classList.remove('vis');
     progressEl.style.width = '100%';
     cards.forEach(c => { c.dataset.off = '5'; });
@@ -1081,6 +1132,7 @@
       counterEl.classList.add('vis');
       arrowPrev.classList.add('vis');
       arrowNext.classList.add('vis');
+      navStrip.classList.add('vis');
       render();
     }, 320);
   }
@@ -1158,6 +1210,15 @@
     else if (activeIdx > 0) goTo(activeIdx - 1);
   });
   arrowNext.addEventListener('click', () => {
+    if (activeIdx < TOTAL) goTo(activeIdx + 1);
+  });
+
+  /* ── NAV STRIP CLICKS ───────────────────── */
+  nsPrev.addEventListener('click', () => {
+    if (activeIdx === 0) goHero();
+    else if (activeIdx > 0) goTo(activeIdx - 1);
+  });
+  nsNext.addEventListener('click', () => {
     if (activeIdx < TOTAL) goTo(activeIdx + 1);
   });
 
