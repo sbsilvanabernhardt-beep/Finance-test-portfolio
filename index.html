@@ -610,6 +610,30 @@
       .card-body {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        /* visible scrollbar on Android */
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0,0,0,.18) transparent;
+      }
+      .card-body::-webkit-scrollbar { width: 3px; }
+      .card-body::-webkit-scrollbar-track { background: transparent; }
+      .card-body::-webkit-scrollbar-thumb {
+        background: rgba(0,0,0,.2);
+        border-radius: 100px;
+      }
+
+      /* fade at bottom of card — hints more content on iOS + Android */
+      .card-inner {
+        position: relative;
+      }
+      .card-inner::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 2.8rem;
+        background: linear-gradient(to bottom, transparent, rgba(255,255,255,.95));
+        pointer-events: none;
+        border-radius: 0 0 22px 22px;
+        z-index: 2;
       }
 
       /* two columns → one column */
