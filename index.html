@@ -592,16 +592,16 @@
         height: 80vh;
       }
 
-      /* flat card positions — simple slide, no rotation */
-      .c-card[data-off="-2"] { transform: translateX(-110%) scale(.88); opacity: 0; }
-      .c-card[data-off="-1"] { transform: translateX(-55%) scale(.93); opacity: .5; }
-      .c-card[data-off="0"]  { transform: translateX(0) scale(1); opacity: 1;
+      /* flat card positions — one card at a time, others fully off-screen */
+      .c-card[data-off="-2"],
+      .c-card[data-off="-1"] { transform: translateX(-130%); opacity: 0; pointer-events: none; }
+      .c-card[data-off="0"]  { transform: translateX(0); opacity: 1;
                                 box-shadow: 0 24px 70px rgba(0,0,0,.45); }
-      .c-card[data-off="1"]  { transform: translateX(55%) scale(.93); opacity: .5; }
-      .c-card[data-off="2"]  { transform: translateX(110%) scale(.88); opacity: 0; }
+      .c-card[data-off="1"],
+      .c-card[data-off="2"]  { transform: translateX(130%); opacity: 0; pointer-events: none; }
       .c-card[data-off="-3"], .c-card[data-off="-4"], .c-card[data-off="-5"],
       .c-card[data-off="3"],  .c-card[data-off="4"],  .c-card[data-off="5"] {
-        transform: translateX(0) scale(.2); opacity: 0; pointer-events: none;
+        transform: translateX(130%); opacity: 0; pointer-events: none;
       }
 
       /* card interior */
