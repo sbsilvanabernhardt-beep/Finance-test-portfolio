@@ -1213,7 +1213,7 @@
   document.getElementById('heroSeeWork').addEventListener('click', () => goTo(0));
 
   /* ── NAV LOGO → back to intro ───────────── */
-  navLogo.addEventListener('click', (e) => { e.preventDefault(); goTo(-1); });
+  navLogo.addEventListener('click', (e) => { e.preventDefault(); goHero(); });
 
   /* ── CONTACT BACK BUTTON ────────────────── */
   document.getElementById('ctBack').addEventListener('click', () => goTo(TOTAL - 1));
