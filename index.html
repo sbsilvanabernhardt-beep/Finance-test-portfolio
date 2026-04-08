@@ -328,6 +328,8 @@
         opacity    var(--dur) var(--ease),
         box-shadow var(--dur) var(--ease);
       will-change: transform, opacity;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
     /* clicking inactive cards navigates to them */
     .c-card:not([data-off="0"]) { cursor: pointer !important; }
